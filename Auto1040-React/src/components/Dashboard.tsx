@@ -11,7 +11,7 @@ const Dashboard = () => {
     if (newValue === 0) {
       navigate('/dashboard/view-forms');
     } else if (newValue === 1) {
-      navigate('/dashboard/personal-information');
+      navigate('/dashboard/user-information');
     }
   };
 
