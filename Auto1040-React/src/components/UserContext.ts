@@ -3,13 +3,9 @@ import { User } from "./Types";
 import { Action } from "./UserReducer";
 export const emptyUser: User =
 {
-  firstName: '',
-  lastName: '',
+  username: "",
   email: '',
   password: '',
-  phone: '',
-  address: '',
-
 };
 
 export const UserContext = createContext<{

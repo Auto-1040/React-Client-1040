@@ -1,6 +1,3 @@
-import { FormikProps } from "formik"
-import {  RecipeFormType } from "./Types"
-
 export const boxStyle = {
     mt: 2,
     bgcolor: 'background.paper',
@@ -29,19 +26,7 @@ export const loginBoxStyle={
     p: 4,
   }
 
-export const recipeFormInputProps = (name: string, formik: FormikProps<RecipeFormType>) => {
-    return {
-        fullWidth: true,
-        id: name,
-        name: name,
-        label: name.charAt(0).toUpperCase() + name.slice(1),
-        value: formik.values[name as keyof RecipeFormType],
-        onChange: formik.handleChange,
-        error: formik.touched[name as keyof RecipeFormType] && Boolean(formik.errors[name as keyof RecipeFormType]),
-        helperText: formik.touched[name as keyof RecipeFormType] && formik.errors[name as keyof RecipeFormType],
-        sx: { mb: 2 }
-    };
-}
+
 function stringToColor(string: String) {
     let hash = 0;
     for (let i = 0; i < string.length; i += 1) {
@@ -55,13 +40,16 @@ function stringToColor(string: String) {
     return color;
   }
   
-export function stringAvatar(firstName: String, lastName: String) {
+
+  export function stringAvatar(name: string) {
     return {
-      alt: `${firstName}${lastName}`,
+      alt: name,
       sx: {
-        bgcolor: stringToColor(`${firstName}${lastName}`),
+        bgcolor: stringToColor(name),
         m: 1,
       },
-      children: `${firstName[0] ?? " "}${lastName[0] ?? " "}`,
+      children: `${name}`[0],
     };
+  
   }
+  
