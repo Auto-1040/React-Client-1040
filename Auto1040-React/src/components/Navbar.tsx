@@ -27,7 +27,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Toolbar>
         {user?.id ? (
           <UserAvatar />
@@ -70,11 +70,11 @@ const Navbar = () => {
           color="inherit"
           startIcon={<DashboardIcon />}
           sx={{ textTransform: 'none' }}
-          onClick={() => navigate('/dashboard')}
+          onClick={() => navigate('/dashboard/view-forms')}
         >
           Dashboard
         </Button>
-        <IconButton edge="end" color="inherit" aria-label="home"     onClick={() => navigate('/')}>
+        <IconButton edge="end" color="inherit" aria-label="home" onClick={() => navigate('/')}>
           <HomeIcon />
         </IconButton>
       </Toolbar>
