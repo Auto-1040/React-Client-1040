@@ -1,7 +1,8 @@
-import React from 'react';
-import { Container, Grid, Paper, TextField, Typography, Button, Box } from '@mui/material';
+import { Container,  Paper, TextField, Typography, Button, Box, useTheme } from '@mui/material';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import Grid from "@mui/material/Grid2";
+
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().max(50).required('Required'),
@@ -11,6 +12,8 @@ const validationSchema = Yup.object().shape({
 
 const PersonalInformation = () => {
     
+const theme = useTheme();
+
   const handleSubmit = (values: any) => {
     console.log(values);
     // Logic to save form data
@@ -19,7 +22,7 @@ const PersonalInformation = () => {
   return (
     <Container maxWidth="md">
       <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-        <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', color: '#333' }}>
+        <Typography variant="h6" gutterBottom sx={{  color: theme.palette.text.primary,fontWeight: 'bold' }}>
           Personal Information
         </Typography>
         <Formik
@@ -34,7 +37,7 @@ const PersonalInformation = () => {
           {({ errors, touched }) => (
             <Form>
               <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
+                <Grid size={18}>
                   <Field
                     as={TextField}
                     name="firstName"
@@ -44,7 +47,7 @@ const PersonalInformation = () => {
                     helperText={touched.firstName && errors.firstName}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={18} >
                   <Field
                     as={TextField}
                     name="lastName"
@@ -54,7 +57,7 @@ const PersonalInformation = () => {
                     helperText={touched.lastName && errors.lastName}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={18}>
                   <Field
                     as={TextField}
                     name="ssn"

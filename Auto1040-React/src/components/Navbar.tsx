@@ -5,16 +5,22 @@ import LoginIcon from '@mui/icons-material/Login';
 import HomeIcon from '@mui/icons-material/Home';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { useNavigate } from 'react-router-dom';
-import SignUp from "./UserSignUp";
-import Login from "./UserLogin";
-import UserContext from "./UserContext";
-import UserAvatar from "./UserAvatar";
+import SignUp from "./User/UserSignUp";
+import Login from "./User/UserLogin";
+import UserContext from "./User/UserContext";
+import UserAvatar from "./User/UserAvatar";
+import { useTheme } from '@mui/material/styles';
+import { ColorModeContext } from '../App'; 
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
 
 const Navbar = () => {
   const { user } = useContext(UserContext);
   const [isRegister, setIsRegister] = useState(false);
   const [isLogging, setIsLogging] = useState(false);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
 
   const switchToSignUp = () => {
     setIsLogging(false);
@@ -26,8 +32,16 @@ const Navbar = () => {
     setIsLogging(true);
   };
 
+  const handleDashboardOpen = () => {
+    if(user.id)
+      navigate('/dashboard/view-forms');
+    else
+      setIsLogging(true);
+  };
+  
+
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed"  sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#000000' : theme.palette.primary.main }}>
       <Toolbar>
         {user?.id ? (
           <UserAvatar />
@@ -70,12 +84,16 @@ const Navbar = () => {
           color="inherit"
           startIcon={<DashboardIcon />}
           sx={{ textTransform: 'none' }}
-          onClick={() => navigate('/dashboard/view-forms')}
+          onClick={() => handleDashboardOpen()}
         >
           Dashboard
         </Button>
-        <IconButton edge="end" color="inherit" aria-label="home" onClick={() => navigate('/')}>
+        <IconButton  color="inherit" aria-label="home" onClick={() => navigate('/')}>
           <HomeIcon />
+        </IconButton>
+        
+        <IconButton edge="end" color="inherit" aria-label="mode" onClick={colorMode.toggleColorMode}>
+          {theme.palette.mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
         </IconButton>
       </Toolbar>
     </AppBar>

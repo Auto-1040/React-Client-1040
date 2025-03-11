@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Box, Drawer, Tab, Tabs } from '@mui/material';
+import { Box, Drawer, Tab, Tabs, Button, useTheme } from '@mui/material';
 import { Outlet, useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const sections = [
   'Personal Information',
@@ -13,40 +14,54 @@ const sections = [
 const UserInfo = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const handleSectionChange = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentSection(newValue);
     switch (newValue) {
       case 0:
-        navigate('personal-information');
+        navigate('personal');
         break;
       case 1:
-        navigate('spouse-information');
+        navigate('spouse');
         break;
       case 2:
-        navigate('address-information');
+        navigate('address');
         break;
       case 3:
-        navigate('filing-information');
+        navigate('filing');
         break;
       case 4:
-        navigate('dependents-information');
+        navigate('dependents');
         break;
       default:
-        navigate('personal-information');
+        navigate('personal');
     }
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', backgroundColor: theme.palette.background.default }}>
       <Drawer
         variant="permanent"
         sx={{
           width: 240,
           flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: 240, boxSizing: 'border-box', backgroundColor: '#f5f5f5', mt: 8 },
+          [`& .MuiDrawer-paper`]: { 
+            width: 240, 
+            boxSizing: 'border-box', 
+            mt: 8 
+          },
         }}
       >
+        <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
+          <Button
+            startIcon={<ArrowBackIcon />}
+            onClick={() => navigate('/dashboard')}
+            sx={{ textTransform: 'none' }}
+          >
+            Dashboard
+          </Button>
+        </Box>
         <Tabs
           orientation="vertical"
           value={currentSection}
@@ -58,7 +73,7 @@ const UserInfo = () => {
           ))}
         </Tabs>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: '#fafafa', mt: 8 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: theme.palette.background.default, mt: 8, ml: 0 }}>
         <Outlet />
       </Box>
     </Box>

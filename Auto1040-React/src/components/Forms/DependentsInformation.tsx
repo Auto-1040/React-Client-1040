@@ -1,12 +1,16 @@
-import { Container, Grid, Paper, TextField, Typography, Button, Box } from '@mui/material';
+import { Container,  Paper, TextField, Typography, Button, Box, useTheme } from '@mui/material';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import Grid from "@mui/material/Grid2";
+
 
 const validationSchema = Yup.object().shape({
   dependents: Yup.string()
 });
 
 const DependentsInformation = () => {
+
+    const theme = useTheme();
   const handleSubmit = (values: any) => {
     console.log(values);
     // Logic to save form data
@@ -15,7 +19,7 @@ const DependentsInformation = () => {
   return (
     <Container maxWidth="md">
       <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-        <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', color: '#333' }}>
+        <Typography variant="h6" gutterBottom sx={{  color: theme.palette.text.primary,fontWeight: 'bold' }}>
           Dependents Information
         </Typography>
         <Formik
@@ -28,7 +32,7 @@ const DependentsInformation = () => {
           {({ errors, touched }) => (
             <Form>
               <Grid container spacing={3}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <Field
                     as={TextField}
                     name="dependents"

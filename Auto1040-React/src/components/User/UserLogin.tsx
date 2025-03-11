@@ -1,17 +1,21 @@
-import { FormEvent, useState } from "react";
-import { User } from "./Types";
-import { Avatar, Box, Button, IconButton, Link, Modal,  TextField, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { emptyUser } from "./UserContext";
-import { loginBoxStyle } from "./Styles";
+import { FormEvent, useContext, useState } from "react";
+import { User } from "../Types";
+import { Avatar, Box, Button, IconButton, Link, Modal, TextField, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid2"; // Import Grid
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CloseIcon from '@mui/icons-material/Close';
-
+import UserContext from "./UserContext";
+import { emptyUser } from "./UserContext";
+import { loginBoxStyle } from "../Styles";
+import { useTheme } from '@mui/material/styles';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const SignUp = ({ open, close, switchToLogin }: { open: boolean, close: Function, switchToLogin: Function }) => {
+
+const Login = ({ open, close, switchToSignUp }: { open: boolean, close: Function, switchToSignUp: Function }) => {
+  const { userDispatch } = useContext(UserContext);
   const [userData, setUserData] = useState<User>(emptyUser);
-  const uri = 'api/auth/register';
+  const theme = useTheme();
+  const uri = 'api/auth/login';
 
   const handleChange = (key: string, value: string) => {
     setUserData({ ...userData, [key]: value });
@@ -24,17 +28,27 @@ const SignUp = ({ open, close, switchToLogin }: { open: boolean, close: Function
         method: 'POST',
         body: JSON.stringify(
           {
-            userName: userData.username,
-            email: userData.email,
+            userNameOrEmail: userData.username,
             password: userData.password,
           }
         ),
         headers: {
           'content-type': 'application/json',
         }
-      })
-      if (response.status === 400) { alert('username or email already exist') }
+      });
+      if (response.status === 400) { alert('Invalid username or password.') }
       else if (!response.ok) { throw new Error(response.status + '') }
+
+      const data = await response.json();
+
+      userDispatch({
+        type: 'CREATE_USER',
+        data: {
+          id: data.user.id,
+          username: data.user.userName,
+          email: data.user.email,
+        },
+      });
 
       setUserData(emptyUser);
       close();
@@ -48,50 +62,39 @@ const SignUp = ({ open, close, switchToLogin }: { open: boolean, close: Function
   return (
     <Modal
       open={open}
-      onClose={() => { close() }}
-      aria-labelledby="signup-modal-title"
-      aria-describedby="signup-modal-description"
+      onClose={() => close()}
+      aria-labelledby="login-modal-title"
+      aria-describedby="login-modal-description"
     >
-      <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh' }} >
+      <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh' }}>
         <Grid size={10}>
           <Box
             component="form"
             onSubmit={handleSubmit}
-            sx={{ ...loginBoxStyle, p: 4 }}
+            sx={{ ...loginBoxStyle }}
           >
             <IconButton
               onClick={() => close()}
-              sx={{ position: 'absolute', top: 8, right: 8, color: 'red' }}
+              sx={{ position: 'absolute', top: 8, right: 8, color: theme.palette.error.main }}
             >
               <CloseIcon />
             </IconButton>
             <Grid container direction="column" alignItems="center">
-              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                <PersonAddIcon />
+              <Avatar sx={{ m: 1, bgcolor: theme.palette.secondary.main }}>
+                <LockOutlinedIcon />
               </Avatar>
-              <Typography variant="h6" component="h1" textAlign="center" id="signup-modal-title">
-                Sign Up
+              <Typography variant="h6" component="h1" textAlign="center" id="login-modal-title">
+                Login
               </Typography>
             </Grid>
 
             <TextField
               id="username"
-              label="Username"
+              label="Username or Email"
               type="text"
               variant="outlined"
               fullWidth
               value={userData.username}
-              onChange={(e) => handleChange(e.target.id, e.target.value)}
-              margin="normal"
-            />
-
-            <TextField
-              id="email"
-              label="Email"
-              type="email"
-              variant="outlined"
-              fullWidth
-              value={userData.email}
               onChange={(e) => handleChange(e.target.id, e.target.value)}
               margin="normal"
             />
@@ -107,12 +110,12 @@ const SignUp = ({ open, close, switchToLogin }: { open: boolean, close: Function
               margin="normal"
             />
 
-            <Button type="submit" variant="contained" fullWidth  sx={{ mt: 2,textTransform:'none', borderRadius: '20px', backgroundColor: '#2196f3', '&:hover': { backgroundColor: '#1e88e5' } }}>
+            <Button type="submit" variant="contained" fullWidth sx={{ mt: 2, borderRadius: '20px', textTransform: 'none', backgroundColor: theme.palette.primary.main, '&:hover': { backgroundColor: theme.palette.primary.dark } }}>
               Continue
             </Button>
 
             <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-              Already have an account? <Link href="#" onClick={() => { close(); switchToLogin(); }}>Log In</Link>
+              Don't have an account? <Link href="#" onClick={() => { close(); switchToSignUp(); }}>Sign Up</Link>
             </Typography>
           </Box>
         </Grid>
@@ -121,4 +124,4 @@ const SignUp = ({ open, close, switchToLogin }: { open: boolean, close: Function
   );
 };
 
-export default SignUp;
+export default Login;

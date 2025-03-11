@@ -1,41 +1,77 @@
-import React, { useState } from 'react';
-import { Box, Drawer, Tab, Tabs } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Drawer, Tab, Tabs, IconButton } from '@mui/material';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
+import MenuIcon from '@mui/icons-material/Menu';
+import ViewListIcon from '@mui/icons-material/ViewList';
+import PersonIcon from '@mui/icons-material/Person';
 
 const Dashboard = () => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const [drawerOpen, setDrawerOpen] = useState(true);
   const navigate = useNavigate();
+  const theme = useTheme();
+
+  useEffect(() => {
+    navigate('dashboard/view-forms');
+  }, []);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
     if (newValue === 0) {
-      navigate('/dashboard/view-forms');
+      navigate('dashboard/view-forms');
     } else if (newValue === 1) {
-      navigate('/dashboard/user-information');
+      navigate('/dashboard/user-information/personal');
     }
   };
 
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', backgroundColor: theme.palette.mode === 'dark' ? '#121212' : '#fafafa' }}>
       <Drawer
         variant="permanent"
         sx={{
-          width: 240,
+          width: drawerOpen ? 240 : 60,
           flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: 240, boxSizing: 'border-box', backgroundColor: '#f5f5f5', mt: 8 },
+          [`& .MuiDrawer-paper`]: {
+            width: drawerOpen ? 240 : 60,
+            boxSizing: 'border-box',
+            mt: 8,
+            ml: 0,
+            overflowX: 'hidden',
+            transition: 'width 0.3s',
+          },
         }}
       >
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start', p: 1 }}>
+          <IconButton onClick={toggleDrawer}>
+            <MenuIcon />
+          </IconButton>
+        </Box>
         <Tabs
           orientation="vertical"
           value={selectedTab}
           onChange={handleTabChange}
-          sx={{ borderRight: 1, borderColor: 'divider' }}
+          sx={{ borderRight: 1, borderColor: 'divider', alignItems: 'flex-end' }}
         >
-          <Tab label="View Forms" sx={{ textTransform: 'none' }} />
-          <Tab label="Personal Information" sx={{ textTransform: 'none' }} />
+          <Tab
+            icon={<ViewListIcon />}
+            iconPosition="start"
+            label={drawerOpen ? "View Forms" : ""}
+            sx={{ textTransform: 'none', justifyContent: 'flex-start' }}
+          />
+          <Tab
+            icon={<PersonIcon />}
+            iconPosition="start"
+            label={drawerOpen ? "Personal Information" : ""}
+            sx={{ textTransform: 'none', justifyContent: 'flex-start' }}
+          />
         </Tabs>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: '#fafafa', mt: 8 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: theme.palette.background.default, mt: 8 }}>
         <Outlet />
       </Box>
     </Box>

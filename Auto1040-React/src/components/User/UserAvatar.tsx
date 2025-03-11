@@ -3,7 +3,7 @@ import { Avatar, Typography, IconButton, Menu, MenuItem, } from "@mui/material";
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { UserContext } from "./UserContext";
-import { stringAvatar } from "./Styles";
+import { stringAvatar } from "../Styles";
 
 const UserAvatar = () => {
   const { user, userDispatch } = useContext(UserContext);

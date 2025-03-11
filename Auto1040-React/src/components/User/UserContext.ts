@@ -1,5 +1,5 @@
 import { Dispatch, createContext } from "react"
-import { User } from "./Types";
+import { User } from "../Types";
 import { Action } from "./UserReducer";
 export const emptyUser: User =
 {

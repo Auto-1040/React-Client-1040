@@ -1,5 +1,5 @@
 
-import { User } from "./Types"
+import { User } from "../Types"
 import { emptyUser } from "./UserContext"
 
 export type Action = {
