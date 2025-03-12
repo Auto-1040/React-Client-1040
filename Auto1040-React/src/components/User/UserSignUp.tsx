@@ -6,57 +6,35 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import UserContext, { emptyUser } from "./UserContext";
 import { loginBoxStyle } from "../Styles";
 import CloseIcon from '@mui/icons-material/Close';
+import { register } from "./UserService.ts";
 
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const SignUp = ({ open, close, switchToLogin }: { open: boolean, close: Function, switchToLogin: Function }) => {
   const [userData, setUserData] = useState<User>(emptyUser);
-  const { userDispatch } = useContext(UserContext);
+  const {  userDispatch } = useContext(UserContext);
   const theme = useTheme();
-  const uri = 'api/auth/register';
 
   const handleChange = (key: string, value: string) => {
     setUserData({ ...userData, [key]: value });
   };
 
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await fetch(`${API_BASE_URL}/${uri}`, {
-        method: 'POST',
-        body: JSON.stringify(
-          {
-            userName: userData.username,
-            email: userData.email,
-            password: userData.password,
-          }
-        ),
-        headers: {
-          'content-type': 'application/json',
-        }
-      })
-      if (response.status === 400) { alert('username or email already exist') }
-      else if (!response.ok) { throw new Error(response.status + '') }
+    const data = await register(userData);
+    console.log(data);
+    userDispatch({
+      type: 'CREATE_USER',
+      data: {
+        id: data.user.id,
+        username: data.user.userName,
+        email: data.user.email,
+      },
+    });
+    setUserData(emptyUser);
+    close();
+  }
 
-      const data = await response.json();
-      console.log(data);
-      userDispatch({
-        type: 'CREATE_USER',
-        data: {
-          id: data.user.id,
-          username: data.user.userName,
-          email: data.user.email,
-        },
-      });
-
-      setUserData(emptyUser);
-      close();
-    }
-    catch (e) {
-      console.log(e);
-      alert('Something went wrong. Please try again later.');
-    }
-  };
 
   return (
     <Modal

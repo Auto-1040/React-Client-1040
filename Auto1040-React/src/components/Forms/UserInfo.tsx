@@ -16,7 +16,16 @@ const UserInfo = () => {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const handleSectionChange = (event: React.SyntheticEvent, newValue: number) => {
+  const nextTab = () => {
+    if (currentSection < 4) {
+      setCurrentSection(currentSection + 1);
+      handleSectionChange(null, currentSection + 1);
+    } else {
+      navigate('/dashboard');
+    }
+  };
+
+  const handleSectionChange = (_: React.SyntheticEvent | null, newValue: number) => {
     setCurrentSection(newValue);
     switch (newValue) {
       case 0:
@@ -46,10 +55,10 @@ const UserInfo = () => {
         sx={{
           width: 240,
           flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { 
-            width: 240, 
-            boxSizing: 'border-box', 
-            mt: 8 
+          [`& .MuiDrawer-paper`]: {
+            width: 240,
+            boxSizing: 'border-box',
+            mt: 8
           },
         }}
       >
@@ -74,7 +83,7 @@ const UserInfo = () => {
         </Tabs>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: theme.palette.background.default, mt: 8, ml: 0 }}>
-        <Outlet />
+        <Outlet context={{ nextTab }} />
       </Box>
     </Box>
   );

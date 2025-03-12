@@ -6,6 +6,9 @@ import { router } from './Router';
 import { RouterProvider } from 'react-router';
 import { emptyUser } from './components/User/UserContext';
 import { createTheme, ThemeProvider, CssBaseline, Theme } from '@mui/material';
+import { Provider } from 'react-redux';
+import store from './store/store.ts';
+import { ModalProvider } from './components/ModalContext.tsx';
 
 export const ColorModeContext = createContext({ toggleColorMode: () => { } });
 
@@ -23,7 +26,7 @@ function App() {
     [],
   );
 
-    
+
   const theme = useMemo((): Theme =>
     createTheme({
       palette: {
@@ -40,7 +43,7 @@ function App() {
         },
         text: {
           primary: mode === 'light' ? '#000000' : '#ffffff', // Black for light mode, white for dark mode
-          secondary: mode === 'light'? '#000000' : '#FF6F61', // Light gray for light mode, dark gray for dark mode
+          secondary: mode === 'light' ? '#000000' : '#FF6F61', // Light gray for light mode, dark gray for dark mode
         },
       },
       components: {
@@ -58,14 +61,19 @@ function App() {
 
   return (
     <>
-      <ColorModeContext value={colorMode}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <UserContext value={{ user, userDispatch }}>
-            <RouterProvider router={router} />
-          </UserContext>
-        </ThemeProvider>
-      </ColorModeContext>
+      <ModalProvider>
+        <Provider store={store}>
+          <ColorModeContext value={colorMode}>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <UserContext value={{ user, userDispatch }}>
+                <RouterProvider router={router} />
+              </UserContext>
+            </ThemeProvider>
+          </ColorModeContext>
+        </Provider>
+      </ModalProvider>
+
     </>
   )
 }

@@ -3,6 +3,10 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Grid from "@mui/material/Grid2";
 
+export interface FilingFormData {
+  filingStatus: string;
+  presidentialCampaign: boolean;
+}
 
 const validationSchema = Yup.object().shape({
   filingStatus: Yup.string().max(50),
@@ -12,7 +16,7 @@ const validationSchema = Yup.object().shape({
 const FilingInformation = () => {
   const theme = useTheme();
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: FilingFormData) => {
     console.log(values);
     // Logic to save form data
   };

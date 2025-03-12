@@ -8,14 +8,13 @@ import UserContext from "./UserContext";
 import { emptyUser } from "./UserContext";
 import { loginBoxStyle } from "../Styles";
 import { useTheme } from '@mui/material/styles';
+import { login } from "./UserService.ts";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Login = ({ open, close, switchToSignUp }: { open: boolean, close: Function, switchToSignUp: Function }) => {
-  const { userDispatch } = useContext(UserContext);
+  const {  userDispatch } = useContext(UserContext);
   const [userData, setUserData] = useState<User>(emptyUser);
   const theme = useTheme();
-  const uri = 'api/auth/login';
 
   const handleChange = (key: string, value: string) => {
     setUserData({ ...userData, [key]: value });
@@ -23,40 +22,19 @@ const Login = ({ open, close, switchToSignUp }: { open: boolean, close: Function
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await fetch(`${API_BASE_URL}/${uri}`, {
-        method: 'POST',
-        body: JSON.stringify(
-          {
-            userNameOrEmail: userData.username,
-            password: userData.password,
-          }
-        ),
-        headers: {
-          'content-type': 'application/json',
-        }
-      });
-      if (response.status === 400) { alert('Invalid username or password.') }
-      else if (!response.ok) { throw new Error(response.status + '') }
 
-      const data = await response.json();
+    const data = await login(userData);
 
-      userDispatch({
-        type: 'CREATE_USER',
-        data: {
-          id: data.user.id,
-          username: data.user.userName,
-          email: data.user.email,
-        },
-      });
-
-      setUserData(emptyUser);
-      close();
-    }
-    catch (e) {
-      console.log(e);
-      alert('Something went wrong. Please try again later.');
-    }
+    userDispatch({
+      type: 'CREATE_USER',
+      data: {
+        id: data.user.id,
+        username: data.user.userName,
+        email: data.user.email,
+      },
+    });
+    setUserData(emptyUser);
+    close();
   };
 
   return (

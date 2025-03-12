@@ -1,22 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Box, Drawer, Tab, Tabs, IconButton } from '@mui/material';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import PersonIcon from '@mui/icons-material/Person';
+import UserContext from './User/UserContext';
+import { ModalContext } from './ModalContext';
 
 const Dashboard = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(true);
   const navigate = useNavigate();
   const theme = useTheme();
+  const { user } = useContext(UserContext);
+  const { openLogin } = useContext(ModalContext);
 
   useEffect(() => {
-    navigate('dashboard/view-forms');
+    if (!user.id) {
+      openLogin();
+      navigate('/');
+    }
+    else
+      navigate('dashboard/view-forms');
   }, []);
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
     if (newValue === 0) {
       navigate('dashboard/view-forms');
@@ -30,7 +39,7 @@ const Dashboard = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', backgroundColor: theme.palette.mode === 'dark' ? '#121212' : '#fafafa' }}>
+    <Box sx={{ display: 'flex', backgroundColor: theme.palette.mode === 'dark' ? '#121212' : '#fafafa', mt: 8 }}>
       <Drawer
         variant="permanent"
         sx={{

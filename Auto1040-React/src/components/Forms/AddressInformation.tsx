@@ -3,6 +3,15 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Grid from "@mui/material/Grid2";
 
+export interface AddressFormData {
+  homeAddress: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  foreignCountry: string;
+  foreignState: string;
+  foreignPostalCode: string;
+}
 
 const validationSchema = Yup.object().shape({
   homeAddress: Yup.string().max(255),
@@ -15,17 +24,16 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddressInformation = () => {
-
   const theme = useTheme();
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: AddressFormData) => {
     console.log(values);
     // Logic to save form data
   };
 
   return (
     <Container maxWidth="md">
-      <Paper elevation={3} sx={{ p: 3, borderRadius: 2, width: '100%'  }}>
+      <Paper elevation={3} sx={{ p: 3, borderRadius: 2, width: '100%' }}>
         <Typography variant="h6" gutterBottom sx={{ color: theme.palette.text.primary, fontWeight: 'bold' }}>
           Address Information
         </Typography>

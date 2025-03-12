@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect } from "react";
 import { AppBar, Toolbar, Typography, Button, Box, IconButton } from "@mui/material";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import LoginIcon from '@mui/icons-material/Login';
@@ -13,32 +13,43 @@ import { useTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../App'; 
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
+import { ModalContext } from './ModalContext';
+import { json } from "stream/consumers";
 
 const Navbar = () => {
-  const { user } = useContext(UserContext);
-  const [isRegister, setIsRegister] = useState(false);
-  const [isLogging, setIsLogging] = useState(false);
+  const { user,userDispatch } = useContext(UserContext);
   const navigate = useNavigate();
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
+  const { isLoginOpen, isRegisterOpen, openLogin, closeLogin, openRegister, closeRegister } = useContext(ModalContext);
 
   const switchToSignUp = () => {
-    setIsLogging(false);
-    setIsRegister(true);
+    closeLogin();
+    openRegister();
   };
 
   const switchToLogin = () => {
-    setIsRegister(false);
-    setIsLogging(true);
+    closeRegister();
+    openLogin();
   };
 
   const handleDashboardOpen = () => {
     if(user.id)
       navigate('/dashboard/view-forms');
     else
-      setIsLogging(true);
+      openLogin();
   };
-  
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      userDispatch({ 
+        type: 'CREATE_USER',
+        data: JSON.parse(savedUser),
+      });
+    }
+    
+  }, []);
 
   return (
     <AppBar position="fixed"  sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#000000' : theme.palette.primary.main }}>
@@ -50,27 +61,27 @@ const Navbar = () => {
             <Button
               variant="contained"
               startIcon={<PersonAddIcon />}
-              onClick={() => setIsRegister(true)}
-              sx={{ mx: 1, backgroundColor: '#e0e0e0', textTransform: 'none', color: '#000', '&:hover': { backgroundColor: '#d5d5d5' } }}
+              onClick={openRegister}
+              sx={{ mx: 1, backgroundColor: theme.palette.primary.main, textTransform: 'none', color:'#000', '&:hover': { backgroundColor: '#d5d5d5' } }}
             >
               Sign Up
             </Button>
             <SignUp
-              open={isRegister}
-              close={() => setIsRegister(false)}
+              open={isRegisterOpen}
+              close={closeRegister}
               switchToLogin={switchToLogin}
             />
             <Button
               variant="contained"
               startIcon={<LoginIcon />}
-              onClick={() => setIsLogging(true)}
+              onClick={openLogin}
               sx={{ mx: 1, backgroundColor: '#e0e0e0', textTransform: 'none', color: '#000', '&:hover': { backgroundColor: '#d5d5d5' } }}
             >
               Log in
             </Button>
             <Login
-              open={isLogging}
-              close={() => setIsLogging(false)}
+              open={isLoginOpen}
+              close={closeLogin}
               switchToSignUp={switchToSignUp}
             />
           </Box>
@@ -83,8 +94,8 @@ const Navbar = () => {
         <Button
           color="inherit"
           startIcon={<DashboardIcon />}
-          sx={{ textTransform: 'none' }}
-          onClick={() => handleDashboardOpen()}
+          sx={{ textTransform: 'none'}}
+          onClick={handleDashboardOpen}
         >
           Dashboard
         </Button>

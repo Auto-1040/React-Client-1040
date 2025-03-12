@@ -1,6 +1,7 @@
 
 import { User } from "../Types"
 import { emptyUser } from "./UserContext"
+import { saveUser } from "./UserService"
 
 export type Action = {
     type: 'CREATE_USER',
@@ -15,6 +16,7 @@ export type Action = {
 export default (state: User, action: Action): User => {
     switch (action.type) {
         case 'CREATE_USER':
+            saveUser(action.data);
             return { ...action.data }
         case 'DELETE_USER':
             return emptyUser
