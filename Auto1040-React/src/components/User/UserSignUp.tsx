@@ -1,9 +1,9 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import { User } from "../Types";
-import { Avatar, Box, Button, IconButton, Link, Modal,  TextField, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Button, IconButton, Link, Modal, TextField, Typography, useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { emptyUser } from "./UserContext";
+import UserContext, { emptyUser } from "./UserContext";
 import { loginBoxStyle } from "../Styles";
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -11,7 +11,8 @@ import CloseIcon from '@mui/icons-material/Close';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const SignUp = ({ open, close, switchToLogin }: { open: boolean, close: Function, switchToLogin: Function }) => {
   const [userData, setUserData] = useState<User>(emptyUser);
-    const theme = useTheme();
+  const { userDispatch } = useContext(UserContext);
+  const theme = useTheme();
   const uri = 'api/auth/register';
 
   const handleChange = (key: string, value: string) => {
@@ -36,6 +37,17 @@ const SignUp = ({ open, close, switchToLogin }: { open: boolean, close: Function
       })
       if (response.status === 400) { alert('username or email already exist') }
       else if (!response.ok) { throw new Error(response.status + '') }
+
+      const data = await response.json();
+      console.log(data);
+      userDispatch({
+        type: 'CREATE_USER',
+        data: {
+          id: data.user.id,
+          username: data.user.userName,
+          email: data.user.email,
+        },
+      });
 
       setUserData(emptyUser);
       close();
@@ -108,7 +120,7 @@ const SignUp = ({ open, close, switchToLogin }: { open: boolean, close: Function
               margin="normal"
             />
 
-            <Button type="submit" variant="contained" fullWidth  sx={{ mt: 2,textTransform:'none', borderRadius: '20px',  backgroundColor: theme.palette.primary.main, '&:hover': { backgroundColor: theme.palette.primary.dark } }}>
+            <Button type="submit" variant="contained" fullWidth sx={{ mt: 2, textTransform: 'none', borderRadius: '20px', backgroundColor: theme.palette.primary.main, '&:hover': { backgroundColor: theme.palette.primary.dark } }}>
               Continue
             </Button>
 
