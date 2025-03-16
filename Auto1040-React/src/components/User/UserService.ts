@@ -60,19 +60,19 @@ export const login = async (userData: User) => {
 }
 
 function saveAccessToken(token: string) {
-    sessionStorage.setItem("token", token);
+    localStorage.setItem("token", token);
     setAuthorizationBearer();
 }
 
 export function saveUser(userData: User) {
     localStorage.setItem("user", JSON.stringify(userData));
+    setAuthorizationBearer();
 }
 
 function setAuthorizationBearer() {
-    const accessToken = sessionStorage.getItem("token");
+    const accessToken = localStorage.getItem("token");
     if (accessToken) {
         axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     }
 }
 
-setAuthorizationBearer();

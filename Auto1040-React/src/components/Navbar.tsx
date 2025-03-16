@@ -42,7 +42,8 @@ const Navbar = () => {
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
-    if (savedUser) {
+    const token = localStorage.getItem("token");
+    if (savedUser&&token) {
       userDispatch({ 
         type: 'CREATE_USER',
         data: JSON.parse(savedUser),

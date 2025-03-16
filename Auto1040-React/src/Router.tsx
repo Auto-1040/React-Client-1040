@@ -1,4 +1,3 @@
-import About from "./components/About";
 import AppLayout from "./components/AppLayout";
 import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
@@ -10,6 +9,7 @@ import AddressInformation from "./components/Forms/AddressInformation";
 import SpouseInformation from "./components/Forms/SpouseInformation";
 import FilingInformation from "./components/Forms/FilingInformation";
 import DependentsInformation from "./components/Forms/DependentsInformation";
+import CreateForm from "./components/CreateForm";
 
 export const router = createBrowserRouter([
     {
@@ -34,7 +34,7 @@ export const router = createBrowserRouter([
                 ]
             },
            
-            { path: '/dashboard/create-1040', element: <></> },
+            { path: '/dashboard/create-1040', element: <CreateForm/> },
 
             { path: '/dashboard/create-1040/upload-pay-slip', element: <></> },
             { path: '/dashboard/create-1040/download', element: <></> },

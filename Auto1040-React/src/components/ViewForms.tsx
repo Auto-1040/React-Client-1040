@@ -4,6 +4,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Grid from '@mui/material/Grid2';
 import { useTheme } from '@mui/material/styles';
+import { useNavigate } from 'react-router';
 
 const ViewForms = () => {
   
@@ -13,10 +14,11 @@ const ViewForms = () => {
     { id: 2, name: 'Form 1040 - 2021', date: '2022-01-15' },
     // Add more forms as needed
   ];
+  const navigate = useNavigate();
+
 
   const handleCreateForm = () => {
-    // Logic to create a new form
-    console.log('Create new form');
+    navigate('/dashboard/create-1040');
   };
 
   const handleDeleteForm = (id: number) => {

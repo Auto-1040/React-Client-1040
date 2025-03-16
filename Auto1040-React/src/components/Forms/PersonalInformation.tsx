@@ -1,5 +1,5 @@
-import { Container, Paper, TextField, Typography, Button, Box, useTheme, FormControl, FormControlLabel, FormLabel, Checkbox, FormGroup } from '@mui/material';
-import { Formik, Form, Field } from 'formik';
+import { Container, Paper, TextField, Typography, Button, Box, useTheme } from '@mui/material';
+import { Formik, Form, Field, FieldProps } from 'formik';
 import * as Yup from 'yup';
 import Grid from "@mui/material/Grid2";
 import { AppDispatch, RootStore } from '../../store/store';
@@ -8,6 +8,8 @@ import { useContext, useEffect } from 'react';
 import { addUserInfo, fetchUserInfo, updateUserInfo } from '../../store/UserInfoSlice';
 import UserContext from '../User/UserContext';
 import { useOutletContext } from 'react-router';
+import { ModalContext } from '../ModalContext';
+import FilingStatus from './FilingStatus';
 
 export interface PersonalFormData {
   firstName: string;
@@ -27,31 +29,29 @@ const validationSchema = Yup.object().shape({
   filingStatus: Yup.string().required('Required')
 });
 
-const filingStatusOptions = [
-  'Single',
-  'Married filing jointly (even if only one had income)',
-  'Married filing separately (MFS)',
-  'Head of household (HOH)',
-  'Qualifying surviving spouse (QSS)'
-];
-
 const PersonalInformation = () => {
   const theme = useTheme();
   const { user } = useContext(UserContext);
   const dispatch = useDispatch<AppDispatch>();
   const userInfo = useSelector((state: RootStore) => state.userInformation.userInfo) as PersonalFormData | null;
   const { nextTab } = useOutletContext<{ nextTab: () => void }>();
+  const { openLogin } = useContext(ModalContext);
 
   useEffect(() => {
-    console.log(user.id);
-    dispatch(fetchUserInfo(user.id ?? 0));
-  }, [dispatch, user.id]);
+    if (user.id) {
+      dispatch(fetchUserInfo(user.id));
+    }
+  }, [dispatch, user]);
 
   const handleSubmit = (values: PersonalFormData) => {
     console.log(values);
-    userInfo ? dispatch(updateUserInfo({ userId: user.id ?? 0, userInfo: values }))
-      : dispatch(addUserInfo({ userId: user.id ?? 0, userInfo: values }));
-    nextTab();
+    if (user.id) {
+      userInfo ? dispatch(updateUserInfo({ userId: user.id, userInfo: values }))
+        : dispatch(addUserInfo({ userId: user.id, userInfo: values }));
+      nextTab();
+    } else {
+      openLogin();
+    }
   };
 
   return (
@@ -126,33 +126,11 @@ const PersonalInformation = () => {
                   />
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                  <FormControl component="fieldset" error={touched.filingStatus && !!errors.filingStatus}>
-                    <FormLabel component="legend">Filing Status</FormLabel>
-                    <Field name="filingStatus">
-                      {({ field }: { field: any }) => (
-                        <FormGroup>
-                          {filingStatusOptions.map((option) => (
-                            <FormControlLabel
-                              key={option}
-                              control={
-                                <Checkbox
-                                  {...field}
-                                  checked={field.value === option}
-                                  onChange={() => field.onChange({ target: { name: field.name, value: option } })}
-                                />
-                              }
-                              label={option}
-                            />
-                          ))}
-                        </FormGroup>
-                      )}
-                    </Field>
-                    {touched.filingStatus && errors.filingStatus && (
-                      <Typography variant="body2" color="error">
-                        {errors.filingStatus}
-                      </Typography>
+                  <Field name="filingStatus">
+                    {({ field }: { field: FieldProps['field'] }) => (
+                      <FilingStatus field={field} touched={touched.filingStatus??false} error={errors.filingStatus} />
                     )}
-                  </FormControl>
+                  </Field>
                 </Grid>
               </Grid>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
