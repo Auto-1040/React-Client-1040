@@ -1,8 +1,8 @@
-import { AddressFormData } from "./Forms/AddressInformation"
-import { DependentsFormData } from "./Forms/DependentsInformation"
-import { FilingFormData } from "./Forms/FilingInformation"
-import { PersonalFormData } from "./Forms/PersonalInformation"
-import { SpouseFormData } from "./Forms/SpouseInformation"
+import { AddressFormData } from "./forms/AddressInformation"
+import { DependentsFormData } from "./forms/DependentsInformation"
+import { FilingFormData } from "./forms/FilingInformation"
+import { PersonalFormData } from "./forms/PersonalInformation"
+import { SpouseFormData } from "./forms/SpouseInformation"
 
 export type User={
     id?:number,

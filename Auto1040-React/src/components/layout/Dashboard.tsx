@@ -5,8 +5,9 @@ import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import PersonIcon from '@mui/icons-material/Person';
-import UserContext from './User/UserContext';
-import { ModalContext } from './ModalContext';
+import AddIcon from '@mui/icons-material/Add';
+import UserContext from '../user/UserContext';
+import { ModalContext } from '../ModalContext';
 
 const Dashboard = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -20,16 +21,18 @@ const Dashboard = () => {
     if (!user.id) {
       openLogin();
       navigate('/');
-    }
-    else
-      navigate('dashboard/view-forms');
-  }, []);
+    } 
+  }, [user, navigate, openLogin]);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
     if (newValue === 0) {
-      navigate('dashboard/view-forms');
+      navigate('view-forms');
+
     } else if (newValue === 1) {
+      navigate('create-1040');
+
+    } else if (newValue === 2) {
       navigate('/dashboard/user-information/personal');
     }
   };
@@ -66,10 +69,17 @@ const Dashboard = () => {
           onChange={handleTabChange}
           sx={{ borderRight: 1, borderColor: 'divider', alignItems: 'flex-end' }}
         >
+          
           <Tab
             icon={<ViewListIcon />}
             iconPosition="start"
             label={drawerOpen ? "View Forms" : ""}
+            sx={{ textTransform: 'none', justifyContent: 'flex-start' }}
+          />
+          <Tab
+            icon={<AddIcon />}
+            iconPosition="start"
+            label={drawerOpen ? "Create New Form" : ""}
             sx={{ textTransform: 'none', justifyContent: 'flex-start' }}
           />
           <Tab

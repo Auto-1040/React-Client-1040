@@ -1,7 +1,7 @@
 
+import { saveUser } from "../../services/AuthUtils"
 import { User } from "../Types"
 import { emptyUser } from "./UserContext"
-import { saveUser } from "./UserService"
 
 export type Action = {
     type: 'CREATE_USER',

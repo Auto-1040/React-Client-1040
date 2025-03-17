@@ -6,7 +6,7 @@ import { AppDispatch, RootStore } from '../../store/store';
 import { useDispatch, useSelector } from "react-redux";
 import { useContext, useEffect } from 'react';
 import { addUserInfo, fetchUserInfo, updateUserInfo } from '../../store/UserInfoSlice';
-import UserContext from '../User/UserContext';
+import UserContext from '../user/UserContext';
 import { useOutletContext } from 'react-router';
 import { ModalContext } from '../ModalContext';
 import FilingStatus from './FilingStatus';

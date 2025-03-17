@@ -1,14 +1,14 @@
-import AppLayout from "./components/AppLayout";
-import Dashboard from "./components/Dashboard";
+import AppLayout from "./components/layout/AppLayout";
+import Dashboard from "./components/layout/Dashboard";
 import Home from "./components/Home";
 import { createBrowserRouter } from "react-router"
 import ViewForms from "./components/ViewForms";
-import UserInfo from "./components/Forms/UserInfo";
-import PersonalInformation from "./components/Forms/PersonalInformation";
-import AddressInformation from "./components/Forms/AddressInformation";
-import SpouseInformation from "./components/Forms/SpouseInformation";
-import FilingInformation from "./components/Forms/FilingInformation";
-import DependentsInformation from "./components/Forms/DependentsInformation";
+import UserInfo from "./components/forms/UserInfo";
+import PersonalInformation from "./components/forms/PersonalInformation";
+import AddressInformation from "./components/forms/AddressInformation";
+import SpouseInformation from "./components/forms/SpouseInformation";
+import FilingInformation from "./components/forms/FilingInformation";
+import DependentsInformation from "./components/forms/DependentsInformation";
 import CreateForm from "./components/CreateForm";
 
 export const router = createBrowserRouter([
@@ -20,7 +20,8 @@ export const router = createBrowserRouter([
             {
                 path: '/dashboard', element: <Dashboard />,
                 children: [
-                    { path: 'view-forms', element: <ViewForms /> }
+                    { path: 'view-forms', element: <ViewForms /> },
+                    { path: 'create-1040', element: <CreateForm/> }
                 ]
             },
             {
@@ -34,7 +35,6 @@ export const router = createBrowserRouter([
                 ]
             },
            
-            { path: '/dashboard/create-1040', element: <CreateForm/> },
 
             { path: '/dashboard/create-1040/upload-pay-slip', element: <></> },
             { path: '/dashboard/create-1040/download', element: <></> },

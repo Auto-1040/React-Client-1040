@@ -1,12 +1,12 @@
 import { FormEvent, useContext, useState } from "react";
-import { User } from "../Types";
+import { User } from "../Types.ts";
 import { Avatar, Box, Button, IconButton, Link, Modal, TextField, Typography, useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import UserContext, { emptyUser } from "./UserContext";
-import { loginBoxStyle } from "../Styles";
+import UserContext, { emptyUser } from "./UserContext.ts";
+import { loginBoxStyle } from "../Styles.ts";
 import CloseIcon from '@mui/icons-material/Close';
-import { register } from "./UserService.ts";
+import { register } from "../../services/UserService.ts";
 
 
 const SignUp = ({ open, close, switchToLogin }: { open: boolean, close: Function, switchToLogin: Function }) => {

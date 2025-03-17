@@ -5,15 +5,15 @@ import LoginIcon from '@mui/icons-material/Login';
 import HomeIcon from '@mui/icons-material/Home';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { useNavigate } from 'react-router-dom';
-import SignUp from "./User/UserSignUp";
-import Login from "./User/UserLogin";
-import UserContext from "./User/UserContext";
-import UserAvatar from "./User/UserAvatar";
+import SignUp from "../user/UserSignUp";
+import Login from "../user/UserLogin";
+import UserContext from "../user/UserContext";
+import UserAvatar from "../user/UserAvatar";
 import { useTheme } from '@mui/material/styles';
-import { ColorModeContext } from '../App'; 
+import { ColorModeContext } from '../../App'; 
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import { ModalContext } from './ModalContext';
+import { ModalContext } from '../ModalContext';
 import { json } from "stream/consumers";
 
 const Navbar = () => {

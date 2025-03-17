@@ -1,5 +1,5 @@
-import axios from "axios";
-import { User } from "../Types";
+import { User } from "../components/Types";
+import { saveAccessToken } from "./AuthUtils";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const register = async (userData: User) => {
@@ -59,20 +59,6 @@ export const login = async (userData: User) => {
     }
 }
 
-function saveAccessToken(token: string) {
-    localStorage.setItem("token", token);
-    setAuthorizationBearer();
-}
 
-export function saveUser(userData: User) {
-    localStorage.setItem("user", JSON.stringify(userData));
-    setAuthorizationBearer();
-}
 
-function setAuthorizationBearer() {
-    const accessToken = localStorage.getItem("token");
-    if (accessToken) {
-        axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-    }
-}
 

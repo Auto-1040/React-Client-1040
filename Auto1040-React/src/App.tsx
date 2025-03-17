@@ -1,10 +1,10 @@
 import './App.css'
 import { createContext, useMemo, useReducer, useState } from 'react';
-import UserReducer from './components/User/UserReducer';
-import UserContext from './components/User/UserContext';
+import UserReducer from './components/user/UserReducer.ts';
+import UserContext from './components/user/UserContext.ts';
 import { router } from './Router';
 import { RouterProvider } from 'react-router';
-import { emptyUser } from './components/User/UserContext';
+import { emptyUser } from './components/user/UserContext.ts';
 import { createTheme, ThemeProvider, CssBaseline, Theme } from '@mui/material';
 import { Provider } from 'react-redux';
 import store from './store/store.ts';
