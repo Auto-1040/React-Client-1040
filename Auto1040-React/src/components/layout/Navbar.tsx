@@ -14,7 +14,6 @@ import { ColorModeContext } from '../../App';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { ModalContext } from '../ModalContext';
-import { json } from "stream/consumers";
 
 const Navbar = () => {
   const { user,userDispatch } = useContext(UserContext);
