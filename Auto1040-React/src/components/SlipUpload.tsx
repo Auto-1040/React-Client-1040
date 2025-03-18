@@ -42,7 +42,7 @@ const SlipUpload: React.FC = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2}}>
       <MuiFileInput
         value={selectedFile}
         onChange={handleFileChange}

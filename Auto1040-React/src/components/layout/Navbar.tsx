@@ -52,7 +52,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <AppBar position="fixed"  sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#000000' : theme.palette.primary.main }}>
+    <AppBar position="fixed"   sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#000000' : theme.palette.primary.main ,zIndex: theme.zIndex.appBar }}>
       <Toolbar>
         {user?.id ? (
           <UserAvatar />

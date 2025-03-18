@@ -42,7 +42,7 @@ const Dashboard = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', backgroundColor: theme.palette.mode === 'dark' ? '#121212' : '#fafafa', mt: 8 }}>
+    <Box sx={{ display: 'flex', backgroundColor: theme.palette.mode === 'dark' ? '#121212' : '#fafafa',zIndex: theme.zIndex.appBar  }}>
       <Drawer
         variant="permanent"
         sx={{

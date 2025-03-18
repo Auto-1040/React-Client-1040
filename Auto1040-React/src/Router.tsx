@@ -10,11 +10,12 @@ import SpouseInformation from "./components/forms/SpouseInformation";
 import FilingInformation from "./components/forms/FilingInformation";
 import DependentsInformation from "./components/forms/DependentsInformation";
 import CreateForm from "./components/CreateForm";
+import ErrorPage from "./components/ErrorPage";
 
 export const router = createBrowserRouter([
     {
         path: '/', element: <AppLayout />,
-        errorElement: <h1>Error. Please try later...</h1>,
+        errorElement: <ErrorPage/>,
         children: [
             { path: '/', element: <Home /> },
             {

@@ -32,19 +32,23 @@ function App() {
       palette: {
         mode,
         primary: {
-          main: mode === 'light' ? '#FF8A80' : '#FF6F61', // Light salmon for light mode, darker salmon for dark mode
+          main: mode === 'light' ? '#1976d2' : '#0d47a1', // Light blue for light mode, darker blue for dark mode
         },
         secondary: {
-          main: mode === 'light' ? '#FFAB91' : '#FF8A65', // Light salmon for light mode, darker salmon for dark mode
+          main: mode === 'light' ? '#64b5f6' : '#42a5f5', // Lighter blue for light mode, slightly darker blue for dark mode
         },
         background: {
-          default: mode === 'light' ? '#f5f5f5' : '#121212', // Light gray for light mode, dark gray for dark mode
-          paper: mode === 'light' ? '#ffffff' : '#1e1e1e', // White for light mode, black for dark mode
+          default: mode === 'light' ? '#e3f2fd' : '#0d47a1', // Light blue background for light mode, dark blue for dark mode
+          paper: mode === 'light' ? '#ffffff' : '#1e1e1e', // White for light mode, dark gray for dark mode
         },
         text: {
           primary: mode === 'light' ? '#000000' : '#ffffff', // Black for light mode, white for dark mode
-          secondary: mode === 'light' ? '#000000' : '#FF6F61', // Light gray for light mode, dark gray for dark mode
+          secondary: mode === 'light' ? '#1976d2' : '#64b5f6', // Blue for light mode, lighter blue for dark mode
         },
+      },
+      zIndex: {
+        appBar: 1200,
+        drawer: 1100,
       },
       components: {
         MuiTypography: {
