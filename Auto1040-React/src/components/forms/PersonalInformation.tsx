@@ -20,12 +20,12 @@ export interface PersonalFormData {
 }
 
 const validationSchema = Yup.object().shape({
-  firstName: Yup.string().max(50).required('Required'),
+  firstName: Yup.string().max(50).required('first name is required'),
   middleInitial: Yup.string().max(1),
-  lastName: Yup.string().max(50).required('Required'),
+  lastName: Yup.string().max(50).required('last name is required'),
   ssn: Yup.string()
     .matches(/^\d{3}-\d{2}-\d{4}$/, 'Invalid SSN format. Expected format: XXX-XX-XXXX')
-    .required('Required'),
+    .required('ssn is required'),
   filingStatus: Yup.string().required('Required')
 });
 

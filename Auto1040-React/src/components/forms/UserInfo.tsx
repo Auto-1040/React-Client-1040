@@ -6,9 +6,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 const sections = [
   'Personal Information',
   'Spouse Information',
-  'Address Information',
-  'Filing Information',
-  'Dependents Information'
+  'Dependents Information',
+  'Address Information'
 ];
 
 const UserInfo = () => {
@@ -35,14 +34,12 @@ const UserInfo = () => {
         navigate('spouse');
         break;
       case 2:
-        navigate('address');
-        break;
-      case 3:
-        navigate('filing');
-        break;
-      case 4:
         navigate('dependents');
         break;
+      case 3:
+        navigate('address');
+        break;
+      
       default:
         navigate('personal');
     }
