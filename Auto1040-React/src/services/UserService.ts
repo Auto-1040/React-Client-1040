@@ -33,6 +33,7 @@ export const register = async (userData: User) => {
 
 export const login = async (userData: User) => {
     try {
+        console.log(API_BASE_URL);
         const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
             method: 'POST',
             body: JSON.stringify(

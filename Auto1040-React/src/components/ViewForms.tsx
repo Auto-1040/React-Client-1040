@@ -2,9 +2,11 @@ import { Button, Container, IconButton, List, ListItem, ListItemIcon, ListItemTe
 import AddIcon from '@mui/icons-material/Add';
 import DescriptionIcon from '@mui/icons-material/Description';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DownloadIcon from '@mui/icons-material/Download';
 import Grid from '@mui/material/Grid2';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router';
+import { downloadFile } from '../services/UploadFile';
 
 const ViewForms = () => {
   
@@ -16,7 +18,6 @@ const ViewForms = () => {
   ];
   const navigate = useNavigate();
 
-
   const handleCreateForm = () => {
     navigate('/dashboard/create-1040');
   };
@@ -24,6 +25,14 @@ const ViewForms = () => {
   const handleDeleteForm = (id: number) => {
     // Logic to delete a form
     console.log(`Delete form with id: ${id}`);
+  };
+
+  const handleDownloadForm = async (name: string) => {
+    try {
+      await downloadFile(name);
+    } catch (error) {
+      console.error('Error downloading form:', error);
+    }
   };
 
   return (
@@ -51,6 +60,9 @@ const ViewForms = () => {
                     <DescriptionIcon sx={{ color: theme.palette.info.main }} />
                   </ListItemIcon>
                   <ListItemText primary={form.name} secondary={`Created on: ${form.date}`} />
+                  <IconButton edge="end" aria-label="download" onClick={() => handleDownloadForm(form.name)}>
+                    <DownloadIcon sx={{ color: theme.palette.success.main }} />
+                  </IconButton>
                   <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteForm(form.id)}>
                     <DeleteIcon sx={{ color: theme.palette.error.main }} />
                   </IconButton>
