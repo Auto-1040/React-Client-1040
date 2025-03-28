@@ -3,7 +3,38 @@ import { withTemporaryAuthHeaderRemoval } from "./AuthUtils";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const uploadFile = async (file: File, uploadProgress: (progressEvent: AxiosProgressEvent) => void): Promise<void> => {
+export const uploadSlip = async (file: File) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file); 
+
+    const response = await axios.post(`${API_BASE_URL}/api/payslip/upload`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    console.log("Slip uploaded:", response);
+    const data = await response.data;
+    return data;
+  } catch (error) {
+    console.error('Error uploading file:', error);
+  }
+};
+
+export const genrate1040Form = async (slipId: number) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/api/OutputForm/generate?paySlipId=${slipId}`)
+    console.log("Form Generated:", response);
+    const data = await response.data;
+    return data;
+  } catch (error) {
+    console.error('Error generating form:', error);
+  }
+
+}
+
+export const uploadFileWithPresignedUrl = async (file: File): Promise<void> => {
   try {
     const response = await axios.get(`${API_BASE_URL}/api/s3/presigned-url/upload`, {
       params: { fileName: file.name }
@@ -22,7 +53,7 @@ export const uploadFile = async (file: File, uploadProgress: (progressEvent: Axi
         headers: {
           'content-type': 'application/pdf'
         },
-        onUploadProgress: uploadProgress
+
       });
     });
 
@@ -32,12 +63,14 @@ export const uploadFile = async (file: File, uploadProgress: (progressEvent: Axi
   }
 };
 
-export const downloadFile = async (fileName: string): Promise<void> => {
+export const downloadFileWithPresignedUrl = async (fileName: string): Promise<void> => {
   try {
+    const nameWithExtension=`${fileName}.pdf`;
     const response = await axios.get(`${API_BASE_URL}/api/s3/presigned-url/download`, {
-      params: { fileName }
+      params: { fileName: nameWithExtension}
     });
 
+    console.log(fileName)
     console.log("Presigned URL received:", response.data);
 
     if (!response.data || !response.data.url) {
@@ -57,7 +90,7 @@ export const downloadFile = async (fileName: string): Promise<void> => {
       const url = window.URL.createObjectURL(new Blob([downloadResponse.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', fileName);
+      link.setAttribute('download', nameWithExtension);
       document.body.appendChild(link);
       link.click();
       link.remove();

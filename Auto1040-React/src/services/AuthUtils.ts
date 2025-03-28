@@ -1,5 +1,7 @@
 import axios from "axios";
 import { User } from "../components/Types";
+import { jwtDecode } from "jwt-decode";
+
 
 export function saveAccessToken(token: string) {
     localStorage.setItem("token", token);
@@ -28,5 +30,16 @@ export const withTemporaryAuthHeaderRemoval = async (callback: () => Promise<voi
     if (originalAuthorizationHeader) {
       axios.defaults.headers.common["Authorization"] = originalAuthorizationHeader;
     }
+  }
+};
+
+
+export const isTokenExpired = (token: string): boolean => {
+  try {
+    const decoded: { exp: number } = jwtDecode(token); 
+    const currentTime = Math.floor(Date.now() / 1000); 
+    return decoded.exp < currentTime; 
+  } catch (error) {
+    return true; 
   }
 };

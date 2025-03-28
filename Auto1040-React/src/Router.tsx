@@ -9,8 +9,8 @@ import AddressInformation from "./components/forms/AddressInformation";
 import SpouseInformation from "./components/forms/SpouseInformation";
 import FilingInformation from "./components/forms/FilingInformation";
 import DependentsInformation from "./components/forms/DependentsInformation";
-import CreateForm from "./components/CreateForm";
 import ErrorPage from "./components/ErrorPage";
+import CreateForm from "./components/generateForm/CreateForm";
 
 export const router = createBrowserRouter([
     {

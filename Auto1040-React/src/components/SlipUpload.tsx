@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {  Box,  IconButton } from '@mui/material';
 import { MuiFileInput } from 'mui-file-input';
-import { uploadFile } from '../services/UploadFile';
+import { uploadSlip } from '../services/FileService';
 import { AxiosProgressEvent } from 'axios';
 import CircularProgressWithLabel from '@mui/material/CircularProgress';
 import UploadIcon from '@mui/icons-material/Upload';
@@ -17,13 +17,6 @@ const SlipUpload: React.FC = () => {
     setSelectedFile(newValue);
   };
 
-  const uploadProgress= (progressEvent: AxiosProgressEvent) => {
-      const percent = Math.round(
-        (progressEvent.loaded * 100) / (progressEvent.total || 1)
-      );
-      console.log('Upload progress:', percent);
-      setProgress(percent);
-  }
   
 
   const handleUpload = async () => {
@@ -33,7 +26,7 @@ const SlipUpload: React.FC = () => {
     }
     setUploading(true);
     try {
-      await uploadFile(selectedFile,uploadProgress);
+      await uploadSlip(selectedFile);
     } catch (err) {
       console.error('Error uploading file:', err);
     } finally {

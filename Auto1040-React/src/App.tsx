@@ -32,18 +32,21 @@ function App() {
       palette: {
         mode,
         primary: {
-          main: mode === 'light' ? '#1976d2' : '#0d47a1', // Light blue for light mode, darker blue for dark mode
+          main: '#4A90E2', // Blue for both light and dark mode
         },
         secondary: {
-          main: mode === 'light' ? '#64b5f6' : '#42a5f5', // Lighter blue for light mode, slightly darker blue for dark mode
+          main: mode === 'light' ? '#D9D9D9' : '#424242', // Light gray for light mode, dark gray for dark mode
         },
         background: {
-          default: mode === 'light' ? '#e3f2fd' : '#0d47a1', // Light blue background for light mode, dark blue for dark mode
-          paper: mode === 'light' ? '#ffffff' : '#1e1e1e', // White for light mode, dark gray for dark mode
+          default: mode === 'light' ? '#F5F5F5' : '#1E1E1E', // Light gray background for light mode, dark gray for dark mode
+          paper: mode === 'light' ? '#FFFFFF' : '#1E1E1E', // White for light mode, dark gray for dark mode
         },
         text: {
-          primary: mode === 'light' ? '#000000' : '#ffffff', // Black for light mode, white for dark mode
-          secondary: mode === 'light' ? '#1976d2' : '#64b5f6', // Blue for light mode, lighter blue for dark mode
+          primary: mode === 'light' ? '#1E3A5F' : '#E0E0E0', // Dark blue for light mode, light gray for dark mode
+          secondary: mode === 'light' ? '#2C3E50' : '#B0BEC5', // Dark blue-gray for light mode, blue-gray for dark mode
+        },
+        success: {
+          main: mode === 'light' ? '#4CAF50' : '#81C784', // Green for light mode, calm green for dark mode
         },
       },
       zIndex: {
@@ -54,7 +57,7 @@ function App() {
         MuiTypography: {
           styleOverrides: {
             root: {
-              color: mode === 'light' ? '#000000' : '#ffffff', // Apply text color based on mode
+              color: mode === 'light' ? '#1E3A5F' : '#E0E0E0', // Apply text color based on mode
             },
           },
         },

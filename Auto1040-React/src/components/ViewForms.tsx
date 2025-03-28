@@ -1,76 +1,41 @@
-import { Button, Container, IconButton, List, ListItem, ListItemIcon, ListItemText, Paper, Typography } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import DescriptionIcon from '@mui/icons-material/Description';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DownloadIcon from '@mui/icons-material/Download';
-import Grid from '@mui/material/Grid2';
-import { useTheme } from '@mui/material/styles';
-import { useNavigate } from 'react-router';
-import { downloadFile } from '../services/UploadFile';
+import { Container, Typography, Card, CardContent, IconButton, Grid, Alert } from "@mui/material";
+import { Download, Visibility, Description } from "@mui/icons-material";
+
+const forms = [
+  { id: 1, type: "1040", date: "2024-03-10", fileUrl: "#" },
+  { id: 2, type: "106", date: "2024-02-25", fileUrl: "#" },
+  { id: 3, type: "1040", date: "2023-12-15", fileUrl: "#" },
+];
 
 const ViewForms = () => {
-  
-  const theme = useTheme();
-  const forms = [
-    { id: 1, name: 'Form 1040 - 2022', date: '2023-01-15' },
-    { id: 2, name: 'Form 1040 - 2021', date: '2022-01-15' },
-    // Add more forms as needed
-  ];
-  const navigate = useNavigate();
-
-  const handleCreateForm = () => {
-    navigate('/dashboard/create-1040');
-  };
-
-  const handleDeleteForm = (id: number) => {
-    // Logic to delete a form
-    console.log(`Delete form with id: ${id}`);
-  };
-
-  const handleDownloadForm = async (name: string) => {
-    try {
-      await downloadFile(name);
-    } catch (error) {
-      console.error('Error downloading form:', error);
-    }
-  };
-
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <Container maxWidth="md" sx={{ mt: 4 }}>
+      <Alert severity="info" sx={{ mb: 3 }}>
+        Keeping previous tax forms is crucial in case of an IRS audit. Your uploaded forms are securely stored here.
+      </Alert>
+      <Typography variant="h5" gutterBottom>
+        Your Archived Tax Forms
+      </Typography>
       <Grid container spacing={3}>
-        <Grid size={{xs:12}}>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={handleCreateForm}
-            sx={{ mb: 2, textTransform: 'none', backgroundColor: theme.palette.primary.main, '&:hover': { backgroundColor: theme.palette.primary.dark } }}
-          >
-            Create New 1040 Form
-          </Button>
-        </Grid>
-        <Grid size={{xs:12}}>
-          <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
-              Previous Forms
-            </Typography>
-            <List>
-              {forms.map((form) => (
-                <ListItem key={form.id} sx={{ borderBottom: '1px solid #e0e0e0', '&:last-child': { borderBottom: 'none' } }}>
-                  <ListItemIcon>
-                    <DescriptionIcon sx={{ color: theme.palette.info.main }} />
-                  </ListItemIcon>
-                  <ListItemText primary={form.name} secondary={`Created on: ${form.date}`} />
-                  <IconButton edge="end" aria-label="download" onClick={() => handleDownloadForm(form.name)}>
-                    <DownloadIcon sx={{ color: theme.palette.success.main }} />
-                  </IconButton>
-                  <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteForm(form.id)}>
-                    <DeleteIcon sx={{ color: theme.palette.error.main }} />
-                  </IconButton>
-                </ListItem>
-              ))}
-            </List>
-          </Paper>
-        </Grid>
+        {forms.map((form) => (
+          <Grid item xs={12} sm={6} key={form.id}>
+            <Card elevation={3} sx={{ display: "flex", alignItems: "center", p: 2 }}>
+              <Description color={form.type === "1040" ? "primary" : "success"} sx={{ fontSize: 40, mr: 2 }} />
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography variant="h6">Form {form.type}</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Uploaded on: {form.date}
+                </Typography>
+              </CardContent>
+              <IconButton color="primary" href={form.fileUrl}>
+                <Visibility />
+              </IconButton>
+              <IconButton color="secondary" href={form.fileUrl} download>
+                <Download />
+              </IconButton>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
     </Container>
   );
