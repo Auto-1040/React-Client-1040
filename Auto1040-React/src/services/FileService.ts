@@ -65,39 +65,64 @@ export const uploadFileWithPresignedUrl = async (file: File): Promise<void> => {
 
 export const downloadFileWithPresignedUrl = async (fileName: string): Promise<void> => {
   try {
-    const nameWithExtension=`${fileName}.pdf`;
-    const response = await axios.get(`${API_BASE_URL}/api/s3/presigned-url/download`, {
-      params: { fileName: nameWithExtension}
-    });
+    const nameWithExtension = `${fileName}.pdf`;
 
-    console.log(fileName)
-    console.log("Presigned URL received:", response.data);
+    // Use getPresignedUrl to fetch the presigned URL for downloading
+    const presignedUrl = await getPresignedUrl(fileName, 'download');
 
-    if (!response.data || !response.data.url) {
-      throw new Error("Invalid Presigned URL response");
-    }
-
-    const presignedUrl: string = response.data.url;
+    console.log("Presigned URL received for download:", presignedUrl);
 
     await withTemporaryAuthHeaderRemoval(async () => {
       const downloadResponse = await axios.get(presignedUrl, {
         responseType: 'blob',
         onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
           console.log(`Download progress: ${Math.round((progressEvent.loaded * 100))}%`);
-        }
+        },
       });
 
+      // Create a blob URL and trigger the download
       const url = window.URL.createObjectURL(new Blob([downloadResponse.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', nameWithExtension);
+      link.setAttribute('download', fileName);
       document.body.appendChild(link);
       link.click();
       link.remove();
     });
-
   } catch (error) {
     console.error('Error downloading file:', error);
     alert('Error downloading file');
+  }
+};
+
+export const viewFileWithPresignedUrl = async (fileName: string): Promise<void> => {
+  try {
+    
+    const presignedUrl: string = await getPresignedUrl(fileName,"download");;
+      // Open the file in a new tab
+      window.open(presignedUrl, "_blank");
+    
+  } catch (error) {
+    console.error("Error viewing file:", error);
+  }
+};
+
+const getPresignedUrl = async (fileName: string, action: 'upload' | 'download'): Promise<string> => {
+  try {
+    const endpoint = action === 'upload' ? 'upload' : 'download';
+    const response = await axios.get(`${API_BASE_URL}/api/s3/presigned-url/${endpoint}`, {
+      params: { fileName },
+    });
+
+    console.log(`Presigned URL received for ${action}:`, response.data);
+
+    if (!response.data || !response.data.url) {
+      throw new Error("Invalid Presigned URL response");
+    }
+
+    return response.data.url;
+  } catch (error) {
+    console.error(`Error getting presigned URL for ${action}:`, error);
+    throw new Error(`Failed to get presigned URL for ${action}`);
   }
 };

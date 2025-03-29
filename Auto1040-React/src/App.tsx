@@ -32,35 +32,35 @@ function App() {
       palette: {
         mode,
         primary: {
-          main: '#4A90E2', // Blue for both light and dark mode
+          main: '#2E4F7A', // Deep blue from the logo for secondary elements
+          contrastText: '#FFFFFF',
+         
         },
         secondary: {
-          main: mode === 'light' ? '#D9D9D9' : '#424242', // Light gray for light mode, dark gray for dark mode
+          main: '#C62D21', // Bold red from the logo for primary elements
+          contrastText: '#FFFFFF', // White text for better readability
         },
         background: {
-          default: mode === 'light' ? '#F5F5F5' : '#1E1E1E', // Light gray background for light mode, dark gray for dark mode
-          paper: mode === 'light' ? '#FFFFFF' : '#1E1E1E', // White for light mode, dark gray for dark mode
+          default: mode === 'light' ? '#F8F9FA' : '#000000', // Soft neutral background for better contrast
+          paper: mode === 'light' ? '#FFFFFF' : '#1C1C1E', // Clean white for light mode, refined dark for dark mode
         },
         text: {
-          primary: mode === 'light' ? '#1E3A5F' : '#E0E0E0', // Dark blue for light mode, light gray for dark mode
-          secondary: mode === 'light' ? '#2C3E50' : '#B0BEC5', // Dark blue-gray for light mode, blue-gray for dark mode
+          primary: mode === 'light' ? '#000000' : '#ffffff', 
+          secondary: mode === 'light' ? '#4d4b4b' : '#ffffff', 
         },
         success: {
-          main: mode === 'light' ? '#4CAF50' : '#81C784', // Green for light mode, calm green for dark mode
+          main: '#4CAF50', // Standard green for success messages
         },
-      },
+        warning: {
+          main: '#F39C12', // Warm orange for warnings
+        },
+        error: {
+          main: '#D32F2F', // Strong red for errors and critical alerts
+        },
+      },      
       zIndex: {
         appBar: 1200,
         drawer: 1100,
-      },
-      components: {
-        MuiTypography: {
-          styleOverrides: {
-            root: {
-              color: mode === 'light' ? '#1E3A5F' : '#E0E0E0', // Apply text color based on mode
-            },
-          },
-        },
       },
     }),
     [mode],

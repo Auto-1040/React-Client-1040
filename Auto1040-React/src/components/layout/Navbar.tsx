@@ -53,7 +53,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#000000' : theme.palette.primary.main, zIndex: theme.zIndex.appBar }}>
+    <AppBar position="fixed" sx={{ backgroundColor: theme.palette.background.default, zIndex: theme.zIndex.appBar }}>
       <Toolbar>
         {user?.id ? (
           <UserAvatar />
@@ -63,7 +63,7 @@ const Navbar = () => {
               variant="contained"
               startIcon={<PersonAddIcon />}
               onClick={openRegister}
-              sx={{ mx: 1, backgroundColor: theme.palette.primary.main, textTransform: 'none', color: '#000', '&:hover': { backgroundColor: '#d5d5d5' } }}
+              sx={{ mx: 1, backgroundColor: theme.palette.primary.main, textTransform: 'none', color: theme.palette.primary.contrastText, '&:hover': { backgroundColor: theme.palette.secondary.main } }}
             >
               Sign Up
             </Button>
@@ -76,7 +76,7 @@ const Navbar = () => {
               variant="contained"
               startIcon={<LoginIcon />}
               onClick={openLogin}
-              sx={{ mx: 1, backgroundColor: '#e0e0e0', textTransform: 'none', color: '#000', '&:hover': { backgroundColor: '#d5d5d5' } }}
+              sx={{ mx: 1, backgroundColor: theme.palette.primary.main, textTransform: 'none', color: theme.palette.primary.contrastText, '&:hover': { backgroundColor: theme.palette.secondary.main } }}
             >
               Log in
             </Button>
@@ -90,25 +90,24 @@ const Navbar = () => {
 
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
           <img
-            src="/logo.png"
+            src="/ez1040logo2.png"
             alt="Auto 1040 Logo"
             style={{ height: '40px', objectFit: 'contain' }}
           />
         </Typography>
 
         <Button
-          color="inherit"
+          sx={{ color: theme.palette.primary.main, textTransform: 'none', '&:hover': { color: theme.palette.secondary.main } }} 
           startIcon={<DashboardIcon />}
-          sx={{ textTransform: 'none' }}
           onClick={handleDashboardOpen}
         >
           Dashboard
         </Button>
-        <IconButton color="inherit" aria-label="home" onClick={() => navigate('/')}>
+        <IconButton sx={{ color: theme.palette.primary.main,  '&:hover': { color: theme.palette.secondary.main } }} aria-label="home" onClick={() => navigate('/')}>
           <HomeIcon />
         </IconButton>
 
-        <IconButton edge="end" color="inherit" aria-label="mode" onClick={colorMode.toggleColorMode}>
+        <IconButton edge="end" sx={{ color: theme.palette.primary.main, '&:hover': { color: theme.palette.secondary.main } }} aria-label="mode" onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
         </IconButton>
       </Toolbar>

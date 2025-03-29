@@ -20,7 +20,7 @@ const UserInfo = () => {
       setCurrentSection(currentSection + 1);
       handleSectionChange(null, currentSection + 1);
     } else {
-      navigate('/dashboard');
+      navigate('/dashboard/view-forms');
     }
   };
 
@@ -62,7 +62,7 @@ const UserInfo = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
           <Button
             startIcon={<ArrowBackIcon />}
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/dashboard/view-forms')}
             sx={{ textTransform: 'none' }}
           >
             Dashboard

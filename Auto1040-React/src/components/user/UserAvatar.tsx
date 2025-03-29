@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Avatar, Typography, IconButton, Menu, MenuItem, } from "@mui/material";
+import { Avatar, Typography, IconButton, Menu, MenuItem, useTheme, } from "@mui/material";
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { UserContext } from "./UserContext";
@@ -8,6 +8,7 @@ import { stringAvatar } from "../Styles";
 const UserAvatar = () => {
   const { user, userDispatch } = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const theme = useTheme();
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -52,7 +53,7 @@ const UserAvatar = () => {
           <LogoutIcon sx={{ mr: 1 }} />Logout
         </MenuItem>
       </Menu>
-      <Typography variant="h6" component="div" sx={{ m: 1 }}>
+      <Typography variant="h6" component="div" sx={{ m: 1, color: theme.palette.primary.main }}>
         {user.username}
       </Typography>
     </>
