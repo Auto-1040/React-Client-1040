@@ -8,6 +8,7 @@ export const emptyUser: User =
   password: '',
 };
 
+
 export const UserContext = createContext<{
   user: User;
   userDispatch: Dispatch<Action>;

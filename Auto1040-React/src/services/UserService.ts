@@ -2,6 +2,8 @@ import { User } from "../components/Types";
 import { saveAccessToken } from "./AuthUtils";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+
+
 export const register = async (userData: User) => {
     try {
         const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
@@ -17,8 +19,8 @@ export const register = async (userData: User) => {
                 'content-type': 'application/json',
             }
         })
-        if (response.status === 400) { alert('username or email already exist') }
-        else if (!response.ok) { throw new Error(response.status + '') }
+        if (response.status === 400) { throw new Error('Username or Email already exist') }
+        else if (!response.ok) { throw new Error('Network error') }
 
         const data = await response.json();
         saveAccessToken(data.token);
@@ -26,8 +28,7 @@ export const register = async (userData: User) => {
     }
     catch (e) {
         console.log(e);
-        alert('Something went wrong. Please try again later.');
-        return null;
+        return e;
     }
 }
 
@@ -46,8 +47,8 @@ export const login = async (userData: User) => {
                 'content-type': 'application/json',
             }
         });
-        if (response.status === 400) { alert('Invalid username or password.') }
-        else if (!response.ok) { throw new Error(response.status + '') }
+        if (response.status === 400) { throw new Error('One or more fields are not valid') }
+        else if (!response.ok) { throw new Error('Network error') }
 
         const data = await response.json();
         saveAccessToken(data.token);
@@ -55,8 +56,7 @@ export const login = async (userData: User) => {
     }
     catch (e) {
         console.log(e);
-        alert('Something went wrong. Please try again later.');
-        return null;
+        return e;
     }
 }
 

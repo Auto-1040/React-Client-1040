@@ -65,8 +65,6 @@ export const uploadFileWithPresignedUrl = async (file: File): Promise<void> => {
 
 export const downloadFileWithPresignedUrl = async (fileName: string): Promise<void> => {
   try {
-    const nameWithExtension = `${fileName}.pdf`;
-
     // Use getPresignedUrl to fetch the presigned URL for downloading
     const presignedUrl = await getPresignedUrl(fileName, 'download');
 

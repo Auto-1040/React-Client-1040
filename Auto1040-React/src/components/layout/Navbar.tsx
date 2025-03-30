@@ -35,7 +35,7 @@ const Navbar = () => {
 
   const handleDashboardOpen = () => {
     if (user.id)
-      navigate('/dashboard/view-forms');
+      navigate('/dashboard');
     else
       openLogin();
   };

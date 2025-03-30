@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Box, Drawer, Tab, Tabs, IconButton } from '@mui/material';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ViewListIcon from '@mui/icons-material/ViewList';
@@ -16,25 +16,42 @@ const Dashboard = () => {
   const theme = useTheme();
   const { user } = useContext(UserContext);
   const { openLogin } = useContext(ModalContext);
+  const location = useLocation();
+
+  const tabsConfig = [
+    {
+      label: "Generate 1040 Form",
+      icon: <AddIcon />,
+      path: "create-1040",
+    },
+    {
+      label: "Personal Information",
+      icon: <PersonIcon />,
+      path: "/dashboard/user-information/personal",
+    },
+    {
+      label: "Archived Tax Forms",
+      icon: <ViewListIcon />,
+      path: "view-forms",
+    },
+  ];
 
   useEffect(() => {
     if (!user.id) {
       openLogin();
       navigate('/');
-    } 
+    }
   }, [user, navigate, openLogin]);
+
+  useEffect(() => {
+    if (location.pathname === "/dashboard") {
+      //navigate(tabsConfig[selectedTab].path)
+    }
+  }, [location, navigate]);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
-    if (newValue === 0) {
-      navigate('view-forms');
-
-    } else if (newValue === 1) {
-      navigate('create-1040');
-
-    } else if (newValue === 2) {
-      navigate('/dashboard/user-information/personal');
-    }
+    navigate(tabsConfig[newValue].path);
   };
 
   const toggleDrawer = () => {
@@ -42,7 +59,7 @@ const Dashboard = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', backgroundColor: theme.palette.mode === 'dark' ? '#121212' : '#fafafa',zIndex: theme.zIndex.appBar  }}>
+    <Box sx={{ display: 'flex', backgroundColor: theme.palette.mode === 'dark' ? '#121212' : '#fafafa', zIndex: theme.zIndex.appBar }}>
       <Drawer
         variant="permanent"
         sx={{
@@ -69,25 +86,16 @@ const Dashboard = () => {
           onChange={handleTabChange}
           sx={{ borderRight: 1, borderColor: 'divider', alignItems: 'flex-end' }}
         >
-          
-          <Tab
-            icon={<ViewListIcon />}
-            iconPosition="start"
-            label={drawerOpen ? "View Forms" : ""}
-            sx={{ textTransform: 'none', justifyContent: 'flex-start' }}
-          />
-          <Tab
-            icon={<AddIcon />}
-            iconPosition="start"
-            label={drawerOpen ? "Create New Form" : ""}
-            sx={{ textTransform: 'none', justifyContent: 'flex-start' }}
-          />
-          <Tab
-            icon={<PersonIcon />}
-            iconPosition="start"
-            label={drawerOpen ? "Personal Information" : ""}
-            sx={{ textTransform: 'none', justifyContent: 'flex-start' }}
-          />
+          {tabsConfig.map((tab, index) => (
+            <Tab
+              key={index}
+              icon={tab.icon}
+              iconPosition="start"
+              label={drawerOpen ? tab.label : ""}
+              sx={{ textTransform: 'none', justifyContent: 'flex-start' }}
+              onClick={(event) => handleTabChange(event, index)}
+            />
+          ))}
         </Tabs>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: theme.palette.background.default, mt: 8 }}>

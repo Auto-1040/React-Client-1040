@@ -14,15 +14,25 @@ const UserInfo = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const navigate = useNavigate();
   const theme = useTheme();
+  
 
   const nextTab = () => {
     if (currentSection < 4) {
       setCurrentSection(currentSection + 1);
       handleSectionChange(null, currentSection + 1);
     } else {
-      navigate('/dashboard/view-forms');
+      navigate('/dashboard');
     }
   };
+
+  const prevTab = () => {
+    if (currentSection > 0) {
+      setCurrentSection(currentSection - 1);
+      handleSectionChange(null, currentSection - 1);
+    } else {
+      navigate('/dashboard');
+    }
+  }
 
   const handleSectionChange = (_: React.SyntheticEvent | null, newValue: number) => {
     setCurrentSection(newValue);
@@ -62,7 +72,7 @@ const UserInfo = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
           <Button
             startIcon={<ArrowBackIcon />}
-            onClick={() => navigate('/dashboard/view-forms')}
+            onClick={() => navigate('/dashboard')}
             sx={{ textTransform: 'none' }}
           >
             Dashboard
@@ -80,7 +90,7 @@ const UserInfo = () => {
         </Tabs>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: theme.palette.background.default, mt: 8, ml: 0 }}>
-        <Outlet context={{ nextTab }} />
+        <Outlet context={{ nextTab,prevTab }} />
       </Box>
     </Box>
   );

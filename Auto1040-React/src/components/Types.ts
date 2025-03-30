@@ -1,6 +1,5 @@
 import { AddressFormData } from "./forms/AddressInformation"
 import { DependentsFormData } from "./forms/DependentsInformation"
-import { FilingFormData } from "./forms/FilingInformation"
 import { PersonalFormData } from "./forms/PersonalInformation"
 import { SpouseFormData } from "./forms/SpouseInformation"
 
@@ -11,9 +10,9 @@ export type User={
     password?: String,
 }
 
-export type UserInfo=FilingFormData|AddressFormData|PersonalFormData
+export type UserInfo=AddressFormData|PersonalFormData
 |SpouseFormData|DependentsFormData;
 
-export type userData= FilingFormData&AddressFormData&PersonalFormData
+export type userData= AddressFormData&PersonalFormData
 &SpouseFormData&DependentsFormData;
 
