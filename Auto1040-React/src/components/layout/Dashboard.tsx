@@ -45,9 +45,12 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (location.pathname === "/dashboard") {
-      //navigate(tabsConfig[selectedTab].path)
+      navigate(tabsConfig[selectedTab].path);
+    } else {
+      navigate(`/dashboard/${tabsConfig[selectedTab].path}`);
     }
-  }, [location, navigate]);
+    console.log(selectedTab);
+  }, []);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);

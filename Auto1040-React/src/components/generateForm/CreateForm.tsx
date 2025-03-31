@@ -39,6 +39,7 @@ const CreateForm: React.FC = () => {
     };
 
     const handleUploadSuccess = (data: any) => {
+        console.log("Uploaded Form 106 Data:", data);
         setForm106Data(data);
         handleNext();
     };
@@ -89,7 +90,7 @@ const CreateForm: React.FC = () => {
                     )}
                     {activeStep === 1 && <UploadForm onSuccess={handleUploadSuccess} />}
 
-                    {activeStep === 2 && <Generate1040Form form106Id={24} />}
+                    {activeStep === 2 && <Generate1040Form form106Id={form106Data.id} />}
                 </CardContent>
             </Card>
 
