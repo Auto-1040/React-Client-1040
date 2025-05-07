@@ -4,6 +4,7 @@ import { userData } from "../Types";
 
 interface UserInfoCardProps {
   userInfo: userData | null;
+  
 }
 
 const UserInfoCard: React.FC<UserInfoCardProps> = ({ userInfo }) => {

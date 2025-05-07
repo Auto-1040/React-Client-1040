@@ -1,18 +1,28 @@
-import React, {  useState } from "react";
-import { Box, Stepper, Step, StepLabel, Button, Typography, Card, CardContent, Alert,  } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
+import { Box, Stepper, Step, StepLabel, Button, Typography, Card, CardContent, Alert, } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootStore } from "../../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootStore } from "../../store/store";
 import UploadForm from "./UploadForm";
 import Generate1040Form from "./Generate1040Form";
 import { userData } from "../Types";
 import UserInfoCard from "./UserInfoCard";
+import UserContext from "../user/UserContext";
+import { fetchUserInfo } from "../../store/UserInfoSlice";
 
 const CreateForm: React.FC = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [form106Data, setForm106Data] = useState<any>(null);
     const userInfo = useSelector((state: RootStore) => state.userInformation.userInfo) as userData | null;
+    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
+    const { user } = useContext(UserContext);
+
+    useEffect(() => {
+        if (user.id) {
+            dispatch(fetchUserInfo(user.id));
+        }
+    }, [dispatch, user]);
 
     const steps = [
         { label: "Personal Information" },
@@ -119,3 +129,4 @@ const CreateForm: React.FC = () => {
 };
 
 export default CreateForm;
+
