@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Typography, Card, CardContent, Grid, TextField, Button, CircularProgress, Snackbar, Alert } from "@mui/material";
 import { Email, Phone, GitHub, Send } from "@mui/icons-material";
+import { sendContactEmail } from "../../services/EmailService";
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ fullName: "", email: "", message: "" });
@@ -18,23 +19,27 @@ const Contact: React.FC = () => {
       setError(true);
       return;
     }
-
+  
     setLoading(true);
     setError(false);
     setSuccess(false);
-
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate a delay
+  
+    const success = await sendContactEmail(
+      formData.fullName,
+      formData.email,
+      formData.message
+    );
+  
+    if (success) {
       setSuccess(true);
-      setFormData({ fullName: "", email: "", message: "" }); // Reset form
-    } catch {
+      setFormData({ fullName: "", email: "", message: "" });
+    } else {
       setError(true);
-    } finally {
-      setLoading(false);
     }
+  
+    setLoading(false);
   };
-
+  
   return (
     <Box sx={{ maxWidth: 800, margin: "auto", padding: 4, textAlign: "center" }}>
       <Typography variant="h4" sx={{ fontWeight: 600, marginBottom: 3 }}>

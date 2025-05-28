@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import {
     Box,
@@ -21,7 +19,7 @@ import {
 import { UploadFile, AccountCircle, Send, Link as LinkIcon, ArrowForward, CheckCircle } from "@mui/icons-material"
 import { useNavigate } from "react-router"
 
-const logoUrl = "/logo.png" // Update with actual logo path
+const logoUrl = "/logo.png" 
 
 const HomePage: React.FC = () => {
     const navigate = useNavigate()
@@ -36,7 +34,6 @@ const HomePage: React.FC = () => {
 
     return (
         <Box sx={{ backgroundColor: theme.palette.background.default, minHeight: "100vh" }}>
-            {/* Hero Section */}
             <Container maxWidth="lg">
                 <Grid
                     container
