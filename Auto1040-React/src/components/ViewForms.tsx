@@ -65,7 +65,7 @@ const ViewForms = () => {
                   Tax Year: {paySlip.taxYear}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Uploaded on: {new Date(paySlip.uploadDate).toLocaleDateString()}
+                  Uploaded on: {paySlip.createdAt.split("T")[0]}
                 </Typography>
               </CardContent>
               <IconButton sx={{ color: "#5e98d4" }} onClick={() => handleView(paySlip.s3Key)}>

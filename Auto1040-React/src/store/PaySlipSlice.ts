@@ -7,7 +7,7 @@ export interface PaySlip {
   id: number;
   s3Key: string;
   taxYear: number;
-  uploadDate:string;
+  createdAt:string;
 }
 
 interface PaySlipState {

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { Box, Button, CardContent, CircularProgress, Divider, Alert } from '@mui/material';
-import {  SaveAlt } from '@mui/icons-material';
+import { SaveAlt } from '@mui/icons-material';
 import { downloadFileWithPresignedUrl, genrate1040Form } from '../../services/FileService';
 
 interface Generate1040FormProps {
@@ -9,9 +9,16 @@ interface Generate1040FormProps {
 
 const Generate1040Form: React.FC<Generate1040FormProps> = ({ form106Id }) => {
     const [loading, setLoading] = useState(false);
-    const [formKey, setFormKey] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    const handleGenerateAndDownload = async () => {
+        if (loading) return;
+        const data = await handleGenerate();
+        if (!data) return;
+        await handleDownload(data.s3Key);
+
+    }
 
     const handleGenerate = async () => {
         try {
@@ -20,21 +27,16 @@ const Generate1040Form: React.FC<Generate1040FormProps> = ({ form106Id }) => {
             setSuccessMessage(null);
 
             const data = await genrate1040Form(form106Id);
-            setFormKey(data.s3Key);
             setSuccessMessage('Form 1040 generated successfully!');
+            return data;
         } catch (err) {
             console.error('Error generating form:', err);
             setErrorMessage('Failed to generate Form 1040. Please try again.');
-        } 
+            return false;
+        }
     };
 
-    useEffect(()=>{
-        if (formKey) {
-            handleDownload();
-        }
-    })
-
-    const handleDownload = async () => {
+    const handleDownload = async (formKey:string) => {
         if (!formKey) {
             setErrorMessage('No form available for download. Please generate the form first.');
             return;
@@ -48,7 +50,7 @@ const Generate1040Form: React.FC<Generate1040FormProps> = ({ form106Id }) => {
             console.error('Error downloading form:', err);
             setErrorMessage('Failed to download Form 1040. Please try again.');
         } finally {
-             setLoading(false);
+            setLoading(false);
         }
     };
 
@@ -81,7 +83,7 @@ const Generate1040Form: React.FC<Generate1040FormProps> = ({ form106Id }) => {
                         fontWeight: 600,
                         fontSize: '1rem',
                         padding: '10px 20px',
-                        backgroundColor: (theme=>theme.palette.primary.main),
+                        backgroundColor: (theme => theme.palette.primary.main),
                         boxShadow: '0 4px 12px rgba(25, 118, 210, 0.4)',
                         display: 'flex',
                         alignItems: 'center',
@@ -96,7 +98,7 @@ const Generate1040Form: React.FC<Generate1040FormProps> = ({ form106Id }) => {
                             boxShadow: 'none',
                         },
                     }}
-                    onClick={()=>{handleGenerate()}}
+                    onClick={() => { handleGenerateAndDownload() }}
                     disabled={loading}
                 >
                     {loading ? (

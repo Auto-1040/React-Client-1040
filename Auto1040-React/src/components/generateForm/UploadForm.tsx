@@ -1,24 +1,44 @@
 import React, { useState, useRef } from 'react';
-import { Box, Button, Typography, CardContent, CircularProgress, Alert } from '@mui/material';
+import {
+  Box,
+  Button,
+  Typography,
+  CardContent,
+  CircularProgress,
+  Alert,
+  Chip,
+  Fade,
+} from '@mui/material';
 import { Description, Cancel } from '@mui/icons-material';
-import { uploadSlip } from '../../services/FileService';
 import UploadIcon from '@mui/icons-material/Upload';
+import { uploadSlip } from '../../services/FileService';
 
 interface Upload106FormProps {
   onSuccess: (data: any) => void;
 }
 
+type FormStatus = 'Idle' | 'File Ready' | 'Uploading' | 'Success' | 'Error';
+
 const Upload106Form: React.FC<Upload106FormProps> = ({ onSuccess }) => {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [formStatus, setFormStatus] = useState<FormStatus>('Idle');
+  const [message, setMessage] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const dropZoneRef = useRef<HTMLDivElement>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setFile(event.target.files[0]);
-      setError(null); // Clear any previous errors
+    if (event.target.files?.length) {
+      const selectedFile = event.target.files[0];
+      if (selectedFile.type === 'application/pdf') {
+        setFile(selectedFile);
+        setError(null);
+        setFormStatus('File Ready');
+      } else {
+        setError('Only PDF files are allowed.');
+        setFormStatus('Error');
+      }
     }
   };
 
@@ -26,40 +46,37 @@ const Upload106Form: React.FC<Upload106FormProps> = ({ onSuccess }) => {
     if (!file) return;
 
     setLoading(true);
-    setError(null); // Clear any previous errors
+    setError(null);
+    setFormStatus('Uploading');
+    setMessage("We're processing your form. You’ll receive an email when it's ready.");
 
     try {
       const data = await uploadSlip(file);
-      onSuccess(data); // Call onSuccess with the uploaded file details
-      setFile(null); // Clear the file input after successful upload
+      setFile(null);
+      setFormStatus('Success');
+      setMessage('Upload successful!');
+      onSuccess(data);
     } catch (err) {
-      console.error('Upload failed:', err);
-      setError('Failed to upload the file. Please try again.');
+      console.error(err);
+      setError('Upload failed. Please try again later.');
+      setFormStatus('Error');
     } finally {
       setLoading(false);
     }
   };
 
-  // Drag and drop handlers
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    e.stopPropagation();
     setIsDragging(true);
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    e.stopPropagation();
-    if (!isDragging) {
-      setIsDragging(true);
-    }
+    setIsDragging(true);
   };
 
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    e.stopPropagation();
-
-    // Only set isDragging to false if we're leaving the dropzone (not its children)
     if (dropZoneRef.current && !dropZoneRef.current.contains(e.relatedTarget as Node)) {
       setIsDragging(false);
     }
@@ -67,19 +84,16 @@ const Upload106Form: React.FC<Upload106FormProps> = ({ onSuccess }) => {
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    e.stopPropagation();
     setIsDragging(false);
+    const droppedFile = e.dataTransfer.files?.[0];
 
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const droppedFile = e.dataTransfer.files[0];
-
-      // Check if the file is a PDF
-      if (droppedFile.type === "application/pdf") {
-        setFile(droppedFile);
-        setError(null);
-      } else {
-        setError("Please upload a PDF file.");
-      }
+    if (droppedFile?.type === 'application/pdf') {
+      setFile(droppedFile);
+      setError(null);
+      setFormStatus('File Ready');
+    } else {
+      setError('Only PDF files are allowed.');
+      setFormStatus('Error');
     }
   };
 
@@ -88,6 +102,24 @@ const Upload106Form: React.FC<Upload106FormProps> = ({ onSuccess }) => {
       <Typography variant="h5" fontWeight={600} textAlign="center" mb={2}>
         Upload Form 106
       </Typography>
+
+      <Chip
+        label={`Status: ${formStatus}`}
+        color={
+          formStatus === 'Idle'
+            ? 'default'
+            : formStatus === 'File Ready'
+            ? 'info'
+            : formStatus === 'Uploading'
+            ? 'primary'
+            : formStatus === 'Success'
+            ? 'success'
+            : 'error'
+        }
+        variant="outlined"
+        sx={{ mb: 2 }}
+      />
+
       <Box
         ref={dropZoneRef}
         onDragEnter={handleDragEnter}
@@ -113,28 +145,42 @@ const Upload106Form: React.FC<Upload106FormProps> = ({ onSuccess }) => {
           style={{ display: 'none' }}
           id="file-input"
         />
-        <label htmlFor="file-input" style={{ display: 'block', width: '100%', height: '100%' }}>
-          <UploadIcon fontSize="large" color={isDragging ? "primary" : "action"} />
-          <Typography variant="body1" color="textSecondary" mt={1}>
-            {isDragging ? "Drop your file here" : file ? file.name : "Drag and Drop or Click to Upload"}
+        <label htmlFor="file-input" style={{ display: 'block', width: '100%' }}>
+          <UploadIcon fontSize="large" color={isDragging ? 'primary' : 'action'} />
+          <Typography variant="body1" mt={1}>
+            {isDragging ? 'Drop your file here' : file ? file.name : 'Drag & Drop or Click to Upload'}
           </Typography>
-          <Typography variant="caption" color="textSecondary" display="block" mt={1}>
+          <Typography variant="caption" color="textSecondary">
             Only PDF files are accepted
           </Typography>
         </label>
       </Box>
+
       {file && (
         <Box mt={2} display="flex" alignItems="center" justifyContent="space-between">
           <Description color="primary" />
           <Typography variant="body2">{file.name}</Typography>
-          <Cancel color="error" sx={{ cursor: 'pointer' }} onClick={() => setFile(null)} />
+          <Cancel color="error" sx={{ cursor: 'pointer' }} onClick={() => {
+            setFile(null);
+            setFormStatus('Idle');
+          }} />
         </Box>
       )}
+
+      {message && (
+        <Fade in={!!message}>
+          <Alert severity="info" sx={{ mt: 2 }}>
+            {message}
+          </Alert>
+        </Fade>
+      )}
+
       {error && (
         <Alert severity="error" sx={{ mt: 2 }}>
           {error}
         </Alert>
       )}
+
       <Button
         variant="contained"
         color="primary"

@@ -35,8 +35,7 @@ import {
   Person as PersonIcon,
   Description as DescriptionIcon,
   CloudUpload as CloudUploadIcon,
-  Logout as LogoutIcon,
-  Settings as SettingsIcon,
+  Logout as LogoutIcon
 } from "@mui/icons-material"
 import UserContext from "../user/UserContext"
 import { ColorModeContext } from "../../App"
@@ -293,17 +292,6 @@ const Navbar = () => {
                       My Forms
                     </MenuItem>
                     <Divider />
-                    <MenuItem
-                      onClick={() => {
-                        handleUserMenuClose()
-                        navigate("settings")
-                      }}
-                    >
-                      <ListItemIcon>
-                        <SettingsIcon fontSize="small" />
-                      </ListItemIcon>
-                      Settings
-                    </MenuItem>
                     <MenuItem onClick={handleLogout}>
                       <ListItemIcon>
                         <LogoutIcon fontSize="small" color="error" />

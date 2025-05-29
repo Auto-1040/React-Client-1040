@@ -68,8 +68,6 @@ export const downloadFileWithPresignedUrl = async (fileName: string): Promise<vo
     // Use getPresignedUrl to fetch the presigned URL for downloading
     const presignedUrl = await getPresignedUrl(fileName, 'download');
 
-    console.log("Presigned URL received for download:", presignedUrl);
-
     await withTemporaryAuthHeaderRemoval(async () => {
       const downloadResponse = await axios.get(presignedUrl, {
         responseType: 'blob',
