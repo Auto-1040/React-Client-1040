@@ -1,54 +1,59 @@
-# React + TypeScript + Vite
+# EZ1040 – Automated 1040 Tax Form Generator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**EZ1040** is a smart web application that automates the generation of IRS Form 1040 for U.S. citizens based on uploaded payslips. It leverages OCR and AI models to extract, analyze, and populate the form according to U.S. tax regulations.
 
-Currently, two official plugins are available:
+## 🔗 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🌐 [Visit the live site](https://react-client-1040.onrender.com/)
 
-## Expanding the ESLint configuration
+> For admin management: [https://angular-admin-1040.onrender.com](https://angular-admin-1040.onrender.com)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## ⚙️ Tech Stack
+
+- **Backend**: ASP.NET Core 9 (Web API)
+- **Frontend**: React 19
+- **Admin Management**: Angular 17
+- **AI Service**: Python microservice (OCR + LLM)
+- **Storage**: AWS S3
+- **Database**: MySql
+- **Architecture**: Clean Architecture
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- [.NET 9 SDK](https://dotnet.microsoft.com/)
+- [Node.js 20+](https://nodejs.org/)
+- Python 3.10+
+- Docker (optional, for services)
+
+### Setup Instructions
+
+1. **Clone the repositories**:
+
+```bash
+git clone https://github.com/Auto-1040/Auto-Backend-1040
+git clone https://github.com/Auto-1040/React-Client-1040
+git clone https://github.com/Auto-1040/TaxOCR-AI
+
+```
+2. **Run the server**
+```bash 
+dotnet run
+```
+3. **Run the client** 
+```bash
+cd Auto1040-React
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+4. **Run the Python microservice (OCR/AI)**
+```bash
+docker build -t ez1040-ocr .
+docker run -p 5000:5000 ez1040-ocr
 ```
